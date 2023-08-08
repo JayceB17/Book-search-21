@@ -6,7 +6,6 @@ query {
         _id
         email
         usermane
-        password
         bookCount
         savedBooks{
             _id

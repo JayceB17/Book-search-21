@@ -1,6 +1,6 @@
 const { User } = require('../models');
 const { signToken } = require('../utils/auth');
-const { Error } = require('../utils/auth');
+const { Error } = require('apollo-server-express');
 
 const resolvers = {
     Query: {
@@ -17,25 +17,24 @@ const resolvers = {
     Mutation: {
         // addUser, adds a new user to the database
         addUser: async (args) => {
-            const user =await user.create(args);
+            const user =await User.create(args);
             const token = signToken(user);
             return { token, user };
         },
 
             // Handles your login
         login: async ({ email, password }) => {
-            const user = await User.findOne({ email });
+            const user = await User.findOne({ email }); 
+            const correctPw = await user.isCorrectPassword(password);
+            const token = signToken(user);
             if (!user) {
                 throw new Error('Incorrect email and password'); 
             }
-
-            const correctPw = await user.isCorrectPassword(password);
 
             if (!correctPw) {
                 throw new Error('Incorrect Password')
             }
 
-            const token = signToken(user);
             return { token, user };
         },
          
