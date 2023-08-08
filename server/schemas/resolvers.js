@@ -1,16 +1,16 @@
 const { User } = require('../models');
 const { signToken } = require('../utils/auth');
-const { AuthenticationError } = require('../utils/auth');
+const { Error } = require('../utils/auth');
 
 const resolvers = {
     Query: {
-        // getUser, gets your logged in data
-        getUser: async (context) => {
+        // me, gets your logged in data
+    me: async (context) => {
             if (context.user) {
                 const userData = await User.findOne({ _id: context.user._id }).select('-_v-password');
                 return userData;
             }
-            throw new AuthenticationError('Not logged in');
+            throw new Error('Not logged in');
         }
 
     },
@@ -26,13 +26,13 @@ const resolvers = {
         login: async ({ email, password }) => {
             const user = await User.findOne({ email });
             if (!user) {
-                throw new AuthenticationError('Incorrect email and password'); 
+                throw new Error('Incorrect email and password'); 
             }
 
             const correctPw = await user.isCorrectPassword(password);
 
             if (!correctPw) {
-                throw new AuthenticationError('Incorrect Password')
+                throw new Error('Incorrect Password')
             }
 
             const token = signToken(user);
@@ -49,7 +49,7 @@ const resolvers = {
             );
             return updatedUser;
            } 
-           throw new AuthenticationError('Please login!');
+           throw new Error('Please login!');
         },
 
         //removeBook, removes a saved book
@@ -62,7 +62,7 @@ const resolvers = {
                 );
                 return updatedUser;
             }
-            throw new AuthenticationError('Please login!');
+            throw new Error('Please login!');
         }
     }
 }

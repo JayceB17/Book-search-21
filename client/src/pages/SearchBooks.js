@@ -87,7 +87,7 @@ const SearchBooks = () => {
 
   return (
     <>
-      <div className="text-light bg-dark p-5">
+      <div className='text-light bg-dark pt-5'>
         <Container>
           <h1>Search for Books!</h1>
           <Form onSubmit={handleFormSubmit}>
@@ -151,4 +151,4 @@ const SearchBooks = () => {
   );
 };
 
-export default SearchBooks;
+export default SearchBooks;;
